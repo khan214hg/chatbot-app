@@ -1,12 +1,12 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
 st.title("💬 ChatGPT Chatbot")
 
-# API key box
+# API key input
 api_key = st.text_input("Enter your OpenAI API key", type="password")
 
-# Prompt box
+# Prompt input
 prompt = st.text_input("Ask me anything")
 
 if st.button("Send"):
@@ -15,11 +15,11 @@ if st.button("Send"):
     elif not prompt:
         st.error("Please enter your question!")
     else:
-        openai.api_key = api_key
+        client = OpenAI(api_key=api_key)
         with st.spinner("Thinking..."):
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}]
             )
             st.success("Response:")
-            st.write(response.choices[0].message["content"])
+            st.write(response.choices[0].message.content)
