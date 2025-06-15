@@ -23,3 +23,16 @@ if st.button("Send"):
             )
             st.success("Response:")
             st.write(response.choices[0].message.content)
+
+try:
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    st.success("Response:")
+    st.write(response.choices[0].message.content)
+
+except openai.RateLimitError:
+    st.error("Rate limit exceeded! Please try again later or check your API usage.")
+except Exception as e:
+    st.error(f"An error occurred: {e}")
